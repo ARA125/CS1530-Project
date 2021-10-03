@@ -1,33 +1,43 @@
 from flask import Flask, render_template, request
-from firebase_admin import initialize_app, credentials, db, auth
+import pyrebase
 app = Flask(__name__, template_folder="../frontend")
 
 
-fire = initialize_app(
-    credentials.Certificate("firebase_config.json"),
-    {
-        "databaseURL": "https://acquired-cargo-244705-default-rtdb.firebaseio.com/"
-    })
+pyrebaseConfig = {
+  "apiKey": "AIzaSyAjeCJ-LtVnSD-ccNm6fgX7uvrry18IqYc",
+  "authDomain": "acquired-cargo-244705.firebaseapp.com",
+  "databaseURL": "https://acquired-cargo-244705-default-rtdb.firebaseio.com",
+  "projectId": "acquired-cargo-244705",
+  "storageBucket": "acquired-cargo-244705.appspot.com",
+  "messagingSenderId": "511206841313",
+  "appId": "1:511206841313:web:a541d177280bb5f197d0a0"
+#   "serviceAccount": "firebase_config.json"
+}
+
+pyre = pyrebase.initialize_app(pyrebaseConfig)
+
+db = pyre.database()
+auth = pyre.auth()
 
 # Basic page
 @app.route("/", methods=["GET"])
 def home():
     return render_template("index.html")
 
-# Return entire database
+# Return entire database FIXME won't work unless logged in as a user?
 @app.route("/database", methods=["GET"])
 def PROTO_get_database():
-    whole_database = db.reference("/data").get()
+    whole_database = db.child("proto").get().val()
     return whole_database or {}
 
-# Add item to database
+# Add item to database FIXME won't work unless logged in as a user?
 @app.route("/insert", methods=["GET", "POST"])
 def PROTO_insert_item():
     if request.method == "GET":
         return render_template("value.html")
     elif request.method == "POST":
         value = request.form["value"]
-        db.reference("/data").child("proto").push(value)
+        db.child("proto").push(value)
         return "", 200
 
 # protype sign up
@@ -38,9 +48,8 @@ def PROTO_signup():
     elif request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
-        
-        # TODO
-        auth.create_user(email=email,email_verified=False,password=password)
+
+        auth.create_user_with_email_and_password(email,password)
 
         return "", 200
 
@@ -57,5 +66,5 @@ def PROTO_login():
 
         return "", 200
 
-### if __name__ == '__main__':
-###     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
