@@ -34,11 +34,38 @@ def PROTO_get_database():
 # Add item to database
 @app.route("/insert", methods=["GET", "POST"])
 def PROTO_insert_item():
-    if request.method == "POST":
+    if request.method == "GET":
+        return render_template("value.html")
+    elif request.method == "POST":
         value = request.form["value"]
         db.reference("/data").child("proto").push(value)
         return "", 200
-    return render_template("value.html")
+
+# protype sign up
+@app.route("/signup", methods=["GET", "POST"])
+def PROTO_signup():
+    if request.method == "GET":
+        return render_template("signup.html")
+    elif request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+        
+        # TODO
+
+        return "", 200
+
+# protype sign up
+@app.route("/login", methods=["GET", "POST"])
+def PROTO_login():
+    if request.method == "GET":
+        return render_template("login.html")
+    elif request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+        
+        # TODO
+
+        return "", 200
 
 ### if __name__ == '__main__':
 ###     app.run(debug=True)
