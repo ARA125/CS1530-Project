@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from firebase_admin import initialize_app, credentials, db
+from firebase_admin import initialize_app, credentials, db, auth
 app = Flask(__name__, template_folder="../frontend")
 
 
@@ -8,17 +8,6 @@ fire = initialize_app(
     {
         "databaseURL": "https://acquired-cargo-244705-default-rtdb.firebaseio.com/"
     })
-
-pyre_config = {
-  "apiKey": "AIzaSyAjeCJ-LtVnSD-ccNm6fgX7uvrry18IqYc",
-  "authDomain": "acquired-cargo-244705.firebaseapp.com",
-  "databaseURL": "https://acquired-cargo-244705-default-rtdb.firebaseio.com",
-  "projectId": "acquired-cargo-244705",
-  "storageBucket": "acquired-cargo-244705.appspot.com",
-  "messagingSenderId": "511206841313",
-  "appId": "1:511206841313:web:a541d177280bb5f197d0a0"
-
-}
 
 # Basic page
 @app.route("/", methods=["GET"])
@@ -51,6 +40,7 @@ def PROTO_signup():
         password = request.form["password"]
         
         # TODO
+        auth.create_user(email=email,email_verified=False,password=password)
 
         return "", 200
 
