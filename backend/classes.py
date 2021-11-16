@@ -1,6 +1,6 @@
 import uuid
 class User:
-  def __init__(self, uniqe_id, username, name, profile_info):
+  def __init__(self, unique_id, username, name, profile_info):
     self.id = unique_id
     self.name = name
     self.username = username
