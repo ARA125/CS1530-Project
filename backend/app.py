@@ -37,9 +37,7 @@ def create_calendar():
         return render_template("new_calendar.html")
     elif request.method == "POST":
         admin_email = session['fb_user']['email']
-        data = {"calendar_name": request.form['calendar_name'],"admin": admin_email}
-        response = db.child("Calendars").push(data)
-        calendarID = response['name']
+        calendarID = create_calendar_func(request.form['calendar_name'], admin_email)
         return redirect(url_for('add_calendar_event', calendar_id = calendarID))
 
 @app.route('/<calendar_id>/add_calendar_event', methods=['GET', 'POST'])
@@ -47,7 +45,7 @@ def add_calendar_event(calendar_id):
     if request.method == "GET":
         return render_template("add_event.html")
     if request.method == "POST":
-        success = add_event_func(calendar_id, request.form["event_name"], request.form["start_date"], request.form["end_date"])
+        event_id = add_event_func(calendar_id, request.form["event_name"], request.form["start_date"], request.form["end_date"])
         return "Event Successfully Added", 200
 if __name__ == '__main__':
     app.run(debug=True)
