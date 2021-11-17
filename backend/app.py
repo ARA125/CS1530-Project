@@ -29,7 +29,11 @@ def login():
         return render_template("login.html")
     elif request.method == "POST":
         session['fb_user'] = get_login(request.form["email"], request.form["password"])
-        return "", 200
+        return redirect(url_for("user"))
+
+@app.route("/user", methods=["GET"])
+def user():
+    return render_template("user.html", email=session['fb_user']["email"]), 200
 
 @app.route("/create_calendar", methods=["GET", "POST"])
 def create_calendar():
@@ -46,6 +50,6 @@ def add_calendar_event(calendar_id):
         return render_template("add_event.html")
     if request.method == "POST":
         event_id = add_event_func(calendar_id, request.form["event_name"], request.form["start_date"], request.form["end_date"])
-        return "Event Successfully Added", 200
+        return redirect(url_for("user"))
 if __name__ == '__main__':
     app.run(debug=True)
