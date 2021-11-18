@@ -5,6 +5,7 @@ from user_management.login import get_login
 from firebase.firebase import db
 from user_management.signup import signup
 from calendar_management.add_event import *
+from group_management.create_group import *
 import uuid
 app = Flask(__name__, template_folder="../frontend")
 app.secret_key = "really_bad_secret_key"
@@ -51,5 +52,15 @@ def add_calendar_event(calendar_id):
     if request.method == "POST":
         event_id = add_event_func(calendar_id, request.form["event_name"], request.form["start_date"], request.form["end_date"])
         return redirect(url_for("user"))
+
+@app.route("/create_group", methods=["GET", "POST"])
+def create_group():
+    if request.method == "GET":
+        return render_template("add_group.html")
+    elif request.method == "POST":
+        admin_email = session['fb_user']['email']
+        groupID = create_group_func(request.form['group_name'], admin_email)
+        return groupID
+
 if __name__ == '__main__':
     app.run(debug=True)
