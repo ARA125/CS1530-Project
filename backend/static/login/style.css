@@ -191,10 +191,18 @@ body{
   text-decoration: underline;
 }
 .forms .form-content .login-text,
-.forms .form-content .sign-up-text{
+.forms .form-content .sign-up-text,
+.error-text {
   text-align: center;
   margin-top: 25px;
 }
+
+.error-text {
+  color: #888 !important;
+  background: beige;
+  border-radius: 5px;
+}
+
 .container #flip{
   display: none;
 }
