@@ -2,13 +2,13 @@
 <!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
 <html lang="en" dir="ltr">
   <head>
-    <title>Welcome, Glenn!</title>
+    <title>Profile</title>
     <meta charset="UTF-8">
     <!--<title> Responsive Sidebar Menu  | CodingLab </title>-->
-    <link rel="stylesheet" type="text/css" href="../main_css_files/dashboardStyles.css">
+    <link rel="stylesheet" type="text/css" href="static/user/dashboard_style.css">
     <!-- Boxicons & Bootstrap CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" type="text/css" href="../main_css_files/cal_css/ml-calendar.css">
+    <link rel="stylesheet" type="text/css" href="static/user/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
    </head>
@@ -77,10 +77,10 @@
      </li>
      <li class="profile">
          <div class="profile-details">
-           <img src="../main_image_files/glenn_image.png" alt="profileImg">
+           <!-- <img src="../main_image_files/glenn_image.png" alt="profileImg"> -->
            <div class="name_job">
-             <div class="name">Glenn Ayieko</div>
-             <div class="job">Tech Expert | Apple Inc.</div>
+             <div class="name">{{ email }}</div>
+             <!-- <div class="job">Tech Expert | Apple Inc.</div> -->
            </div>
          </div>
          <i class='bx bx-log-out' id="log_out" ></i>
@@ -88,7 +88,7 @@
     </ul>
   </div>
   <section class="home-section">
-      <div class="text">Welcome Glenn!</div>
+      <div class="text">Welcome {{ email }}!</div>
       <div class="cal">
           <body class="ml-calendar-demo">
   <div class="ml-calendar">

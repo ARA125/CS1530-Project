@@ -55,7 +55,7 @@ def login():
 
 @app.route("/user", methods=["GET"])
 def user():
-    return render_template("user.html", email=session['fb_user']["email"]), 200
+    return render_template("user.html", email=session['fb_user']["email"])
 
 @app.route("/create_calendar", methods=["GET", "POST"])
 def create_calendar():
