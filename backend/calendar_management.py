@@ -13,4 +13,14 @@ def create_cal(calendar_name, admin_email, id):
 # return all calendars owned by a user
 # any error returns null
 def get_user_calendars(id):
+    try:
         return db.child("Calendars").order_by_child("owner").equal_to(id).get()
+    except:
+        return None
+# return a calendar by ID
+# any error returns null
+def get_calendar(id):
+    try:
+        return db.child("Calendars").child(id).get().val()
+    except:
+        return None

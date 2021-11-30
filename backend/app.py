@@ -52,14 +52,18 @@ def login():
 
 @app.route("/user", methods=["GET"])
 def user():
-    return render_template("user.html", email=session['fb_user']["email"], calendars=get_user_calendars(session['fb_user']["localId"]))
+    return render_template("user.html", calendars=get_user_calendars(session['fb_user']["localId"]))
 
 @app.route("/create_calendar", methods=["POST"])
 def create_calendar():
     owner_email = session['fb_user']['email']
     owner_id = session['fb_user']['localId']
     calendarID = create_cal(request.form['name'], owner_email, owner_id)
-    return redirect(url_for('add_calendar_event', calendar_id = calendarID))
+    return redirect(url_for('display_calendar', calendar_id=calendarID))
+
+@app.route('/user/<calendar_id>/', methods=['GET'])
+def display_calendar(calendar_id):
+    return render_template("calendar.html", calendar=get_calendar(calendar_id))
 
 @app.route('/<calendar_id>/add_calendar_event', methods=['GET', 'POST'])
 def add_calendar_event(calendar_id):
