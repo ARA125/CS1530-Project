@@ -16,7 +16,7 @@ def home():
 
 @app.route("/signup", methods=["POST"])
 def sign_up():
-    res = signup(request.form["email"], request.form["password"])
+    res = signup(request.form["email"], request.form["password"], request.form["name"])
     if res == 0:
         flash("That email is invalid or already in use.")
         return redirect(url_for("login"))
@@ -27,6 +27,7 @@ def sign_up():
         # after signing up, log in automatically and go to user profile
         # NOTE: assumes no errors in get_login will happen
         session['fb_user'] = get_login(request.form["email"], request.form["password"])
+        session['fb_user_profile'] = get_profile(request.form["email"])
         return redirect(url_for("user"))
 
 @app.route("/login", methods=["GET", "POST"])
@@ -46,13 +47,16 @@ def login():
             return redirect(url_for("login"))
         else:
             session['fb_user'] = user_or_error
+            # get profile of logged in user NOTE: assumes this function will work
+            # if it doesn't work, a user profile might not doesn't exist, which shouldn't happen
+            session['fb_user_profile'] = get_profile(request.form["email"])
         
             # after logging in, take the user to their page
             return redirect(url_for("user"))
 
 @app.route("/user", methods=["GET"])
 def user():
-    return render_template("user.html", calendars=get_user_calendars(session['fb_user']["localId"]))
+    return render_template("user.html", calendars=get_user_calendars(session['fb_user']["localId"]), invite_calendars=get_invited_calendars(session['fb_user']['localId']), get_cal=get_calendar)
 
 @app.route("/create_calendar", methods=["POST"])
 def create_calendar():
@@ -64,6 +68,11 @@ def create_calendar():
 @app.route('/user/<calendar_id>/', methods=['GET'])
 def display_calendar(calendar_id):
     return render_template("calendar.html", calendar=get_calendar(calendar_id))
+
+@app.route('/user/<calendar_id>/invite', methods=['POST'])
+def invite(calendar_id):
+    invite_user(calendar_id, request.form['email'])
+    return redirect(url_for("display_calendar", calendar_id=calendar_id))
 
 @app.route('/user/<calendar_id>/add_event', methods=['GET', 'POST'])
 def add_calendar_event(calendar_id):

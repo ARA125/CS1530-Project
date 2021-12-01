@@ -78,7 +78,7 @@
          <div class="profile-details">
            <!-- <img src="../main_image_files/glenn_image.png" alt="profileImg"> -->
            <div class="name_job">
-             <div class="name">{{ session['fb_user']['email'] }}</div>
+             <div class="name">{{ session['fb_user_profile']['email'] }}</div>
              <!-- <div class="job">Tech Expert | Apple Inc.</div> -->
            </div>
          </div>
@@ -87,7 +87,7 @@
     </ul>
   </div>
   <section class="home-section">
-      <div class="text">Welcome {{ session['fb_user']['email'] }}!</div>
+      <div class="text">Welcome {{ session['fb_user_profile']['name'] }}!</div>
 
       <!-- CALENDAR LISTS BODY -->
       <div class="cal-groups">
@@ -97,6 +97,15 @@
             <div class="cal-item">
               <div class="cal-figure"></div>
               <div class="cal-name">{{ calendar.val()['calendar_name'] }}</div>
+            </div>
+          </a>
+          {% endfor %}
+
+          {% for calendar in invite_calendars %}
+          <a href="{{url_for('display_calendar', calendar_id=calendar.key())}}">
+            <div class="cal-item">
+              <div class="cal-figure red"></div>
+              <div class="cal-name">{{ get_cal(calendar.key())['calendar_name'] }}</div>
             </div>
           </a>
           {% endfor %}

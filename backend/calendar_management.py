@@ -19,6 +19,15 @@ def get_user_calendars(id):
         return db.child("Calendars").order_by_child("owner").equal_to(id).get()
     except:
         return None
+
+# return all calendars a user is invited to
+# any error returns null
+def get_invited_calendars(id):
+    try:
+        return db.child("Users").child(id).child("invites").get()
+    except:
+        return None
+
 # return a calendar by ID
 # any error returns null
 def get_calendar(id):
@@ -46,3 +55,18 @@ def sort_calendar_events_by_day(id, year, month):
 
         dt = dt + timedelta(days=1)
     return ret
+
+
+# TODO if user is the owner, fail
+def invite_user(id, email):
+    # get the user id by email
+    try:
+        uid = db.child("Users").order_by_child("email").equal_to(email).get().pyres[0].key()
+    except:
+        print("FAIL")
+        return 0
+    # add the user to the calendar's whitelist
+    db.child("Calendars").child(id).child("whitelist").child(uid).set({"elevation": 0})
+    # add the calendar to the user's list of calendars
+    db.child("Users").child(uid).child("invites").child(id).set({"accepted": 0})
+    return -1

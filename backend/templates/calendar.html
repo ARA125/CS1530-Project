@@ -96,7 +96,7 @@
         <p class="subheading">Today</p>
         <h1 id="todayDate"></h1>
       <p><span class="calendar-btn" onclick="openEventModal()"><i class="fas fa-plus"></i> Add new item</span></p>
-      <!-- <p><a href="#" class="calendar-btn"><i class="fas fa-minus"></i> Remove an item</a></p> -->
+      <p><span class="calendar-btn" onclick="openInviteModal()"><i class="fas fa-plus"></i> Invite user</span></p>
       </div>
     </section>
     <section class="calendar-right">
@@ -139,6 +139,14 @@
     <form method="post" action="add_event">
       <input type="text" name="name">
       <input type="date" name="date">
+      <button type="submit">OK</button>
+    </form>
+  </dialog>
+
+  <dialog id="newInvite">
+    <button onclick="closeInviteModal()">&times</button>
+    <form method="post" action="invite">
+      <input type="email" name="email">
       <button type="submit">OK</button>
     </form>
   </dialog>
@@ -254,13 +262,21 @@
     return el;
   }
 
-  // new calendar modal
+  // modals
     function openEventModal() {
     newEvent.showModal();
   }
 
   function closeEventModal() {
     newEvent.close();
+  }
+
+  function openInviteModal() {
+    newInvite.showModal();
+  }
+
+  function closeInviteModal() {
+    newInvite.close();
   }
   </script>
 </body>
