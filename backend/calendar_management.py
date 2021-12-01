@@ -36,11 +36,13 @@ def get_calendar_events(id):
         return None
 
 # return calendar events sorted by days
+# TODO fix runtime
 def sort_calendar_events_by_day(id, year, month):
     ret = []
     dt = date(year, month, 1)
     while dt.month == month:
-        ret.append(get_calendar_events(id).order_by_child("date").equal_to(f"{year}-{month}-{dt.day}").get().val())
+        # if day is 0
+        ret.append(get_calendar_events(id).order_by_child("date").equal_to(date.isoformat(dt)).get().val())
 
         dt = dt + timedelta(days=1)
     return ret
