@@ -420,6 +420,8 @@ body.ml-calendar-demo {
           padding: 1px 8px 0 8px;
           font-size: .7rem;
           font-weight: 400;
+          overflow: hidden;
+          word-break: break-all;
           border-radius: 10px;
           background-color: #ececec;
           color: #999;
@@ -431,4 +433,20 @@ body.ml-calendar-demo {
 .calendar-events {
   max-height: 2em;
   overflow-y: auto;
+}
+
+dialog {
+  border: none;
+  margin: auto;
+  padding: 2em;
+  border-radius: 1em;
+}
+
+dialog button.x {
+  float: right;
+  margin-top: -1.6em;
+  margin-right: -0.8em;
+  border: none;
+  background: transparent;
+  font-size: 1.2em;
 }

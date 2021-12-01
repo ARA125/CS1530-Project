@@ -101,14 +101,16 @@
           </a>
           {% endfor %}
 
-          {% for calendar in invite_calendars %}
-          <a href="{{url_for('display_calendar', calendar_id=calendar.key())}}">
-            <div class="cal-item">
-              <div class="cal-figure red"></div>
-              <div class="cal-name">{{ get_cal(calendar.key())['calendar_name'] }}</div>
-            </div>
-          </a>
-          {% endfor %}
+          {% if invite_calendars %}
+            {% for calendar in invite_calendars %}
+            <a href="{{url_for('display_calendar', calendar_id=calendar.key())}}">
+              <div class="cal-item">
+                <div class="cal-figure red"></div>
+                <div class="cal-name">{{ get_cal(calendar.key())['calendar_name'] }}</div>
+              </div>
+            </a>
+            {% endfor %}
+          {% endif %}
 
           <div class="cal-item">
             <div class="cal-figure add" onclick="openNewCalendarModal()">+</div>
@@ -116,7 +118,7 @@
       </div>
 
       <dialog id="newCal">
-        <button onclick="closeNewCalendarModal()">&times</button>
+        <button class="x" onclick="closeNewCalendarModal()">&times</button>
         <form method="post" action="create_calendar">
           <input type="text" name="name">
           <button type="submit">OK</button>

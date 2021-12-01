@@ -24,7 +24,7 @@ def get_user_calendars(id):
 # any error returns null
 def get_invited_calendars(id):
     try:
-        return db.child("Users").child(id).child("invites").get()
+        return db.child("Users").child(id).child("invites").get().val()
     except:
         return None
 

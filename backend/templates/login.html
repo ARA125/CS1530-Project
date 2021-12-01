@@ -51,12 +51,12 @@
               <div class="text sign-up-text">Don't have an account? <label for="flip">Sigup now</label></div>
 
               {% with messages = get_flashed_messages() %}
-              {% if messages %}
-                {% for message in messages %}
-                <div class="text error-text">{{message}}</div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
+                {% if messages %}
+                  {% for message in messages %}
+                  <div class="text error-text">{{message}}</div>
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
 
             </div>
         </form>
