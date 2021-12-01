@@ -19,10 +19,10 @@ def sign_up():
     res = signup(request.form["email"], request.form["password"])
     if res == 0:
         flash("That email is invalid or already in use.")
-        return redirect(url_for("signup"))
+        return redirect(url_for("sign_up"))
     elif res == 1:
         flash("An unknown error has occured.")
-        return redirect(url_for("signup"))
+        return redirect(url_for("sign_up"))
     else:
         # after signing up, log in automatically and go to user profile
         # NOTE: assumes no errors in get_login will happen
