@@ -427,3 +427,8 @@ body.ml-calendar-demo {
           margin-top: 3px; }
   .ml-calendar .clear {
     clear: both; }
+
+.calendar-events {
+  max-height: 2em;
+  overflow-y: auto;
+}

@@ -1,9 +1,11 @@
 # this file handles adding/modifying/deleting calendars and events, and sorting calendars
 from firebase import db
-def add_event(calendar_id, event_name, start_date, end_date):
-    data = {"event_name": event_name, "start_date": start_date, "end_date": end_date}
-    eventID = db.child("Calendars").child(calendar_id).child("events").push(data)
+from datetime import date, timedelta
+def add_event(id, name, date):
+    data = {"event_name": name, "date": date}
+    eventID = db.child("Calendars").child(id).child("events").push(data)
     return eventID
+
 def create_cal(calendar_name, admin_email, id):
     data = {"calendar_name":calendar_name, "owner_email": admin_email, "owner": id}
     response = db.child("Calendars").push(data)
@@ -24,3 +26,21 @@ def get_calendar(id):
         return db.child("Calendars").child(id).get().val()
     except:
         return None
+
+# return all events of a calendar
+# any error returns null
+def get_calendar_events(id):
+    try:
+        return db.child("Calendars").child(id).child("events")
+    except:
+        return None
+
+# return calendar events sorted by days
+def sort_calendar_events_by_day(id, year, month):
+    ret = []
+    dt = date(year, month, 1)
+    while dt.month == month:
+        ret.append(get_calendar_events(id).order_by_child("date").equal_to(f"{year}-{month}-{dt.day}").get().val())
+
+        dt = dt + timedelta(days=1)
+    return ret

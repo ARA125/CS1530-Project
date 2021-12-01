@@ -65,13 +65,17 @@ def create_calendar():
 def display_calendar(calendar_id):
     return render_template("calendar.html", calendar=get_calendar(calendar_id))
 
-@app.route('/<calendar_id>/add_calendar_event', methods=['GET', 'POST'])
+@app.route('/user/<calendar_id>/add_event', methods=['GET', 'POST'])
 def add_calendar_event(calendar_id):
     if request.method == "GET":
         return render_template("add_event.html")
     if request.method == "POST":
-        event_id = add_event(calendar_id, request.form["event_name"], request.form["start_date"], request.form["end_date"])
-        return redirect(url_for("user"))
+        add_event(calendar_id, request.form["name"], request.form["date"])
+        return redirect(url_for("display_calendar", calendar_id=calendar_id))
+
+@app.route('/user/<calendar_id>/events/<year>/<month>', methods=['GET'])
+def get_month_events(calendar_id, year, month):
+        return {"items": sort_calendar_events_by_day(calendar_id, int(year), int(month))}
 
 @app.route("/create_group", methods=["GET", "POST"])
 def create_group():

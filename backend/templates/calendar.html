@@ -95,7 +95,7 @@
       <div class="sidebar_cal">
         <p class="subheading">Today</p>
         <h1 id="todayDate"></h1>
-      <p><a href="#" class="calendar-btn"><i class="fas fa-plus"></i> Add new item</a></p>
+      <p><span class="calendar-btn" onclick="openEventModal()"><i class="fas fa-plus"></i> Add new item</span></p>
       <!-- <p><a href="#" class="calendar-btn"><i class="fas fa-minus"></i> Remove an item</a></p> -->
       </div>
     </section>
@@ -133,6 +133,16 @@
 
       </div>
   </section>
+
+  <dialog id="newEvent">
+    <button onclick="closeEventModal()">&times</button>
+    <form method="post" action="add_event">
+      <input type="text" name="name">
+      <input type="date" name="date">
+      <button type="submit">OK</button>
+    </form>
+  </dialog>
+
   <script>
   let sidebar = document.querySelector(".sidebar");
   let closeBtn = document.querySelector("#btn");
@@ -187,41 +197,70 @@
   }
 
   function calLeft() {
-    console.log("test");
     shown_date.setMonth(shown_date.getMonth() - 1);
     displayCalendarMonth();
   }
 
   function calRight() {
-    console.log("test");
     shown_date.setMonth(shown_date.getMonth() + 1);
     displayCalendarMonth();
   }
 
   // change the calendar to display this month
   function displayCalendarMonth() {
-    monthyear.innerText = shown_date.toLocaleDateString("en-us", {"month": "long", "year": "numeric"});
-
     let offset = shown_date.getDay();
-    // set the days of the first couple blocks to nothing. Based on what day the month starts
-    for (let i = 0; i < offset; i++) calendar.children[2].children[i].children[0].innerText = "";
-    
+
     // get the length of the month
     let date = new Date(shown_date);
     date.setMonth(shown_date.getMonth() + 1);
     date.setDate(0);
     let length = date.getDate();
 
+    console.log(window.location.href + `events/${shown_date.getFullYear()}/${shown_date.getMonth()+1}`);
+    fetch(window.location.href + `events/${shown_date.getFullYear()}/${shown_date.getMonth()+1}`).then(_ => _.json()).then(events => {
+        for (let i = 0; i < length; i++) {
+          let j = i + offset;
+          for (let k in events.items[i]) {
+            calendar.children[2 + Math.trunc(j / 7)].children[j % 7].children[1].append(createEventElement(events.items[i][k].event_name));
+          }
+        }
+    });
+    monthyear.innerText = shown_date.toLocaleDateString("en-us", {"month": "long", "year": "numeric"});
+
+    // set the days of the first couple blocks to nothing. Based on what day the month starts
+    for (let i = 0; i < offset; i++) {
+      calendar.children[2].children[i].children[0].innerText = "";
+      calendar.children[2].children[i].children[1].innerText = "";
+    }
+
     for (let i = 0; i < length; i++) {
-      j = i + offset;
+      let j = i + offset;
       calendar.children[2 + Math.trunc(j / 7)].children[j % 7].children[0].innerText = String(i+1);
+      calendar.children[2 + Math.trunc(j / 7)].children[j % 7].children[1].innerText = "";
     }
 
     // clear the rest of the nodes
     let rest = offset + length;
     for (let i = rest; i < 42; i++) {
       calendar.children[2 + Math.trunc(i / 7)].children[i % 7].children[0].innerText = "";
+      calendar.children[2 + Math.trunc(i / 7)].children[i % 7].children[1].innerText = "";
     }
+  }
+
+  function createEventElement(text) {
+    let el = document.createElement("div");
+    el.innerText = text;
+    el.className = "calendar-event";
+    return el;
+  }
+
+  // new calendar modal
+    function openEventModal() {
+    newEvent.showModal();
+  }
+
+  function closeEventModal() {
+    newEvent.close();
   }
   </script>
 </body>
