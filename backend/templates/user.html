@@ -103,10 +103,10 @@
 
           {% if invite_calendars %}
             {% for calendar in invite_calendars %}
-            <a href="{{url_for('display_calendar', calendar_id=calendar.key())}}">
+            <a href="{{url_for('display_calendar', calendar_id=calendar)}}">
               <div class="cal-item">
                 <div class="cal-figure red"></div>
-                <div class="cal-name">{{ get_cal(calendar.key())['calendar_name'] }}</div>
+                <div class="cal-name">{{ get_cal(calendar)['calendar_name'] }}</div>
               </div>
             </a>
             {% endfor %}
