@@ -1,8 +1,8 @@
 # this file handles adding/modifying/deleting calendars and events, and sorting calendars
 from firebase import db
 from datetime import date, timedelta
-def add_event(id, name, date):
-    data = {"event_name": name, "date": date}
+def add_event(id, name, dt):
+    data = {"event_name": name, "date": date.fromisoformat(dt).toordinal()}
     eventID = db.child("Calendars").child(id).child("events").push(data)
     return eventID
 
@@ -45,17 +45,38 @@ def get_calendar_events(id):
         return None
 
 # return calendar events sorted by days
-# TODO fix runtime
 def sort_calendar_events_by_day(id, year, month):
     ret = []
-    dt = date(year, month, 1)
-    while dt.month == month:
-        # if day is 0
-        ret.append(get_calendar_events(id).order_by_child("date").equal_to(date.isoformat(dt)).get().val())
+    # dt - start of month
+    dt = date(year, month, 1).toordinal()
+    new_month = month + 1
+    new_year = year
+    if new_month == 13:
+        new_year = year + 1
+        new_month = 1
+    # dte - end of month
+    dte = date(new_year, new_month, 1) - timedelta(days=1)
+    dte = dte.toordinal()
+    events = get_calendar_events(id).order_by_child("date").start_at(dt).end_at(dte).get().val()
 
-        dt = dt + timedelta(days=1)
+    day = []
+    dt_count = dt
+    # NOTE assume events in order
+    for e in events:
+        # if it is not still counting events of the day
+        if events[e]["date"] != dt_count:
+            ret.append(day)
+            dt_count += 1
+            # set dt_count to new date
+            # set any dates skipped over to empty objects
+            while dt_count != events[e]["date"]:
+                ret.append(None)
+                dt_count += 1
+            day = []
+        
+        day.append(events[e])
+    ret.append(day)
     return ret
-
 
 # TODO if user is the owner, fail
 def invite_user(id, email):

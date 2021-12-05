@@ -224,7 +224,7 @@
     date.setDate(0);
     let length = date.getDate();
 
-    console.log(window.location.href + `events/${shown_date.getFullYear()}/${shown_date.getMonth()+1}`);
+    // console.log(window.location.href + `events/${shown_date.getFullYear()}/${shown_date.getMonth()+1}`);
     fetch(window.location.href + `events/${shown_date.getFullYear()}/${shown_date.getMonth()+1}`).then(_ => _.json()).then(events => {
         for (let i = 0; i < length; i++) {
           let j = i + offset;
