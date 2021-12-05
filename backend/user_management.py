@@ -39,5 +39,5 @@ def get_profile(email):
         return None
 
 
-def logout():
+def log_out():
     session['fb_user'] = None

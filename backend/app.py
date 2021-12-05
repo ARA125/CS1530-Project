@@ -69,6 +69,11 @@ def create_calendar():
 def display_calendar(calendar_id):
     return render_template("calendar.html", calendar=get_calendar(calendar_id))
 
+@app.route("/logout", methods=['GET'])
+def log_out_of_site():
+    log_out()
+    return redirect(url_for("login"))
+
 @app.route('/user/<calendar_id>/invite', methods=['POST'])
 def invite(calendar_id):
     invite_user(calendar_id, request.form['email'])
