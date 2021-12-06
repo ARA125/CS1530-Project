@@ -97,6 +97,7 @@
         <h1 id="todayDate"></h1>
       <p><span class="calendar-btn" onclick="openEventModal()"><i class="fas fa-plus"></i> Add new item</span></p>
       <p><span class="calendar-btn" onclick="openInviteModal()"><i class="fas fa-plus"></i> Invite user</span></p>
+      <p><span class="calendar-btn" onclick="openRecommendModal()"><i class="fas fa-plus"></i> Recommend Date</span></p>
       </div>
     </section>
     <section class="calendar-right">
@@ -149,6 +150,13 @@
       <input type="email" name="email">
       <button type="submit">OK</button>
     </form>
+  </dialog>
+
+  <dialog id="recommendDialog">
+    <button class="x" onclick="closeRecommendModal()">&times</button>
+    <input id="recommendDays" type="number" placeholder="How many days should be searched?">
+    <button type="submit" onclick="recommend()">Search</button>
+    <p id="recommendResult"></p>
   </dialog>
 
   <script>
@@ -214,6 +222,16 @@
     displayCalendarMonth();
   }
 
+  function recommend() {
+    fetch(window.location.href + `recommend/${recommendDays.value}`).then(_ => _.json()).then(json => {
+      console.log(json.result);
+      let d = new Date(json.result);
+      d.setMinutes(d.getMinutes() + d.getTimezoneOffset());
+      // return date as string (offset by timezone)
+      recommendResult.innerText = d.toDateString();
+    });
+  }
+
   // change the calendar to display this month
   function displayCalendarMonth() {
     let offset = shown_date.getDay();
@@ -277,6 +295,14 @@
 
   function closeInviteModal() {
     newInvite.close();
+  }
+
+  function openRecommendModal() {
+    recommendDialog.showModal();
+  }
+
+  function closeRecommendModal() {
+    recommendDialog.close();
   }
   </script>
 </body>
