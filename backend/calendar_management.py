@@ -137,7 +137,7 @@ def recommend_day(id, limit):
         best_day = dt_count
     # if dt_count does not reach dte, the end of the range is not reached, so there are days
     # at the end that are free. return the next date after dt_count, which is free
-    # if dt_count == dt, there are no events in the calendar, so skip
-    if dt_count != dte and dt_count != dt:
+    # if there are no events in the calendar skip
+    if dt_count != dte and len(events) != 0:
         return date.fromordinal(dt_count + 1)
     return date.fromordinal(best_day)
