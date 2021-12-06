@@ -91,6 +91,10 @@ def add_calendar_event(calendar_id):
 def get_month_events(calendar_id, year, month):
         return {"items": sort_calendar_events_by_day(calendar_id, int(year), int(month))}
 
+@app.route('/user/<calendar_id>/recommend/<num>', methods=['GET'])
+def recommend(calendar_id, num):
+        return {"result": recommend_day(calendar_id, int(num))}
+
 @app.route("/create_group", methods=["GET", "POST"])
 def create_group():
     if request.method == "GET":
